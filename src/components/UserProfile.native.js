@@ -1,26 +1,13 @@
-import { LitElement, html, css } from "lit";
-
-class UserProfile extends LitElement {
-
-  constructor () {
+class UserProfile extends HTMLElement {
+  constructor() {
     super();
-    this.data = {};
-    this.gender = "";
-  }
-  
-  static get properties () {
-    return {
-      data: { 
-        type: Object
-      },
-      gender: { 
-        type: String
-      }
-    }
+    this.attachShadow({ mode: "open" });
   }
 
   static get styles() {
-    return css`
+    return /* css */`
+      :host {
+      }
       .user {
         display: inline-flex;
         border: 1px solid #222;
@@ -98,33 +85,27 @@ class UserProfile extends LitElement {
       });
   }
 
-  firstUpdated () {
-    setTimeout(() => this.fetchData()
-    , 1500);
+  connectedCallback() {
+    this.gender = this.getAttribute("gender");
+    this.fetchData()
+      .then(() => this.render());
   }
 
-  renderLoading () {
-    return html`
-    <img src="spinner.gif" alt="spinner">
-    `;
-  }
-
-  render () {
+  render() {
     const user = this.data;
-    return !this.data.name
-      ? this.renderLoading()
-      : html`
-        <div class="user">
-          <img src="${user.picture}" alt="${user.name}" class="picture">
-          <div class="info">
-            <h1>${user.name} ${user.surname}</h1>
-            <div><strong>Email</strong>: <span>${user.email}</span></div>
-            <div><strong>Location</strong>: <span>${user.location}</span></div>
-            <div><strong>Age</strong>: <span>${user.age}</span> · <strong>Gender</strong>: <span>${user.gender}</span></div>
-            <div><strong>Login</strong>: <span>${user.login}</span></div>
-          </div>
-          <span class="id">${user.idCard}</span>
-        </div>`;
+    this.shadowRoot.innerHTML = /* html */`
+    <style>${UserProfile.styles}</style>
+    <div class="user">
+      <img src="${user.picture}" alt="${user.name}" class="picture">
+      <div class="info">
+        <h1>${user.name} ${user.surname}</h1>
+        <div><strong>Email</strong>: <span>${user.email}</span></div>
+        <div><strong>Location</strong>: <span>${user.location}</span></div>
+        <div><strong>Age</strong>: <span>${user.age}</span> · <strong>Gender</strong>: <span>${user.gender}</span></div>
+        <div><strong>Login</strong>: <span>${user.login}</span></div>
+      </div>
+      <span class="id">${user.idCard}</span>
+    </div>`;
   }
 }
 

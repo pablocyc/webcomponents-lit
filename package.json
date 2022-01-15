@@ -26,5 +26,8 @@
     "vite": "^2.7.2"
   },
   "keywords": [],
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^2.1.1"
+  }
 }
